@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using vroom.AppDbContext;
 
 namespace vroom.Migrations
 {
     [DbContext(typeof(VroomDbContext))]
-    partial class VroomDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201219203330_AddPhone")]
+    partial class AddPhone
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -141,9 +143,11 @@ namespace vroom.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.Property<string>("LoginProvider");
+                    b.Property<string>("LoginProvider")
+                        .HasMaxLength(128);
 
-                    b.Property<string>("ProviderKey");
+                    b.Property<string>("ProviderKey")
+                        .HasMaxLength(128);
 
                     b.Property<string>("ProviderDisplayName");
 
@@ -174,55 +178,17 @@ namespace vroom.Migrations
                 {
                     b.Property<string>("UserId");
 
-                    b.Property<string>("LoginProvider");
+                    b.Property<string>("LoginProvider")
+                        .HasMaxLength(128);
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasMaxLength(128);
 
                     b.Property<string>("Value");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("vroom.Models.Car", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Currency")
-                        .IsRequired();
-
-                    b.Property<string>("Features");
-
-                    b.Property<string>("ImagePath");
-
-                    b.Property<int>("MakeID");
-
-                    b.Property<int>("Mileage");
-
-                    b.Property<int>("ModelID");
-
-                    b.Property<int>("Price");
-
-                    b.Property<string>("SellerEmail");
-
-                    b.Property<string>("SellerName")
-                        .IsRequired();
-
-                    b.Property<string>("SellerPhone")
-                        .IsRequired();
-
-                    b.Property<int>("Year");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MakeID");
-
-                    b.HasIndex("ModelID");
-
-                    b.ToTable("Cars");
                 });
 
             modelBuilder.Entity("vroom.Models.Make", b =>
@@ -312,19 +278,6 @@ namespace vroom.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("vroom.Models.Car", b =>
-                {
-                    b.HasOne("vroom.Models.Make", "Make")
-                        .WithMany()
-                        .HasForeignKey("MakeID")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("vroom.Models.Model", "Model")
-                        .WithMany()
-                        .HasForeignKey("ModelID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
