@@ -43,7 +43,7 @@ namespace vroom.Models
         [Required(ErrorMessage = "Provide Price of Car")]
         public int Price { get; set; }
 
-        [RegularExpression("^[1-9]*$", ErrorMessage = "Select Currency")]
+        [RegularExpression("^[A-Z]*$", ErrorMessage = "Select Currency")]
         public string Currency { get; set; }
 
         public string ImagePath { get; set; }

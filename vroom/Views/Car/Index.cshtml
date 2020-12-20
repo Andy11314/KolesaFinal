@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<vroom.Models.Car>
+@using vroom.Helpers;
 @{ ViewData["Title"] = "Index";
                 Layout = "~/Views/Shared/_Layout.cshtml"; }
 
@@ -9,9 +10,12 @@
     <div class="col-6">
         <h2 class="text-info">Cars</h2>
     </div>
-    <div class="col-6 text-right">
-        <a class="btn btn-info" asp-action="Create">Add New Car</a>
-    </div>
+    @if (User.IsInRole(Roles.Admin) || User.IsInRole(Roles.Executive))
+    {
+        <div class="col-6 text-right">
+            <a class="btn btn-info" asp-action="Create">Add New Car</a>
+        </div>
+    }
     <br />
     <div class="col-12">
         <table class="table table-striped border">
@@ -34,20 +38,27 @@
             </tr>
             @foreach (var item in Model)
             {
-            <tr>
-                <td><img src="@Html.DisplayFor(m=> item.ImagePath)" width="150px" height="100px" /></td>
-                <td>
-                    <b>@Html.DisplayFor(m=> item.Make.Name) (@Html.DisplayFor(m=> item.Year))</b> <br />
-                    <b>Model: </b>@Html.DisplayFor(m=> item.Model.Name)<br />
-                    <b>Mileage: </b>@Html.DisplayFor(m=> item.Mileage)
-                </td>
-                <td>
-                    <b>Name: </b>@Html.DisplayFor(m=> item.SellerName)<br />
-                    <b>Email: </b>@Html.DisplayFor(m=> item.SellerEmail)<br />
-                    <b>Phone: </b>@Html.DisplayFor(m=> item.SellerPhone)
-                </td>
+        <tr>
+            <td><img src="@Html.DisplayFor(m=> item.ImagePath)" width="150px" height="100px" /></td>
+            <td>
+                <b>@Html.DisplayFor(m => item.Make.Name) (@Html.DisplayFor(m => item.Year))</b> <br />
+                <b>Model: </b>@Html.DisplayFor(m => item.Model.Name)<br />
+                <b>Mileage: </b>@Html.DisplayFor(m => item.Mileage)
+            </td>
+            <td>
+                <b>Price: </b>@Html.DisplayFor(m => item.Price) @Html.DisplayFor(m => item.Currency) <br />
+            </td>
+            <td>
+                <b>Name: </b>@Html.DisplayFor(m => item.SellerName)<br />
+                <b>Email: </b>@Html.DisplayFor(m => item.SellerEmail)<br />
+                <b>Phone: </b>@Html.DisplayFor(m => item.SellerPhone)
+            </td>
+            @if (User.IsInRole(Roles.Admin) || User.IsInRole(Roles.Executive))
+             {
                 <partial name="_TableButtonPartials" model="item.Id" />
-            </tr>            
+
+             }
+        </tr>
             }
 
         </table>

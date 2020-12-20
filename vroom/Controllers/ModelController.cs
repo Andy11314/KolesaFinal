@@ -96,7 +96,12 @@ namespace vroom.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
+        [AllowAnonymous]
+        [HttpGet("api/models/{MakeID}")]
+        public IEnumerable<Model> Models(int MakeID)
+        {
+            return _db.Models.ToList().Where(m => m.MakeID == MakeID);
+        }
 
     }
 }

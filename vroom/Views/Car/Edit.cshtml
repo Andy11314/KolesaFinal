@@ -1,15 +1,13 @@
 ﻿@model vroom.Models.ViewModels.CarViewModel
 @using vroom.Extensions
 @{ ViewData["Title"] = "Create";
-                Layout = "~/Views/Shared/_Layout.cshtml"; 
- }
+    Layout = "~/Views/Shared/_Layout.cshtml"; }
 
 
-<script>
-    $(document).ready(function () {
+<script>$(document).ready(function () {
         var MakeDDL = $("#Make");
         var ModelDDL = $("#Model");
-        ModelDDL.prop('disabled', true);
+        //ModelDDL.prop('disabled', true);
 
         MakeDDL.change(function () {
             if ($(this).val() == "0") {
@@ -32,12 +30,13 @@
             }
         });
 
-    });
-</script>
+    });</script>
 
 <br />
 <h2 class="text-info">Add Car</h2>
-<form method="post" enctype="multipart/form-data" asp-action="Create">
+<form method="post" enctype="multipart/form-data" asp-action="Edit">
+    <input hidden asp-for="Car.Id" />
+    <input hidden asp-for="Car.ImagePath" />
     <div class="form-group row">
         <div class="col-2">
             <label asp-for="Makes"></label>
@@ -135,7 +134,7 @@
     </div>
     <br />
     <div class="form-group">
-        <input type="submit" class="btn btn-primary" value="Create" />
+        <input type="submit" class="btn btn-primary" value="Update" />
         <a asp-action="Index" class="btn btn-success">Back</a>
     </div>
 

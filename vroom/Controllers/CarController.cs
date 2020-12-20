@@ -33,6 +33,8 @@ namespace vroom.Controllers
                 Car = new Models.Car()
             };
         }
+
+        [AllowAnonymous]
         public IActionResult Index()
         {
             var Cars = _db.Cars.Include(m => m.Make).Include(m => m.Model);
@@ -83,38 +85,52 @@ namespace vroom.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        //[HttpPost, ActionName("Edit")]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult EditPost()
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View(ModelVM);
-        //    }
-        //    //var MakeFromDB = _db.Models.Where(m => m.Id == id).FirstOrDefault();
-        //    //if(MakeFromDB==null)
-        //    //{
-        //    //    return NotFound();
-        //    //}
-        //    //MakeFromDB.Name = ModelVM.Model.Name;
-        //    //MakeFromDB.MakeID = ModelVM.Model.MakeID;   
-        //    _db.Update(ModelVM.Model);
-        //    _db.SaveChanges();
-        //    return RedirectToAction(nameof(Index));
-        //}
+        [HttpPost, ActionName("Edit")]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditPost()
+        {
+            if (!ModelState.IsValid)
+            {
+                CarVM.Makes = _db.Makes.ToList();
+                CarVM.Models = _db.Models.ToList();
+                return View(CarVM);
+            }
+            _db.Cars.Update(CarVM.Car);
+            var CarID = CarVM.Car.Id;
+            string wwrootPath = _hostingEnvironment.WebRootPath;
+            var files = HttpContext.Request.Form.Files;
+            var SavedCar = _db.Cars.Find(CarID);
 
-        ////HTTP Get Method
-        //[HttpGet]
-        //public IActionResult Edit(int id)
-        //{
-        //    ModelVM.Model = _db.Models.Include(m => m.Make).SingleOrDefault(m => m.Id == id);
-        //    if (ModelVM.Model == null)
-        //    {
-        //        return NotFound();
-        //    }
+            if (files.Count != 0)
+            {
+                var ImagePath = @"images\car\";
+                var Extension = Path.GetExtension(files[0].FileName);
+                var RelativeImagePath = ImagePath + CarID + Extension;
+                var AbsImagePath = Path.Combine(wwrootPath, RelativeImagePath);
 
-        //    return View(ModelVM);
-        //}
+                using (var fileStream = new FileStream(AbsImagePath, FileMode.Create))
+                {
+                    files[0].CopyTo(fileStream);
+                }
+
+                SavedCar.ImagePath = RelativeImagePath;
+            }
+            _db.SaveChanges();
+            return RedirectToAction(nameof(Index));
+        }
+
+        //HTTP Get Method
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            CarVM.Car = _db.Cars.SingleOrDefault(m => m.Id == id);
+            CarVM.Models = _db.Models.Where(m => m.MakeID == CarVM.Car.MakeID);
+            if (CarVM.Car == null)
+            {
+                return NotFound();
+            }
+            return View(CarVM);
+        }
         [HttpPost]
         public IActionResult Delete(int id)
         {
