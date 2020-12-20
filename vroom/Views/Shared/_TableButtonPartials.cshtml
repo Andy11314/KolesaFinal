@@ -5,13 +5,11 @@
 *@
 @if (User.IsInRole(Roles.Admin))
 {
-<td class="text-right">
     <div class="btn-group" role="group">
         <a type="button" class="btn btn-primary" href="@Url.Action("Edit/" + Model)"><i class="far fa-edit"></i></a>
         <form method="post" action="Delete">
             <button onclick="if (!confirm('Are you sure?')) { return false }" type="submit" class="btn btn-danger rounded-0 " asp-action="Delete" asp-route-id="@Model"><i class="far fa-trash-alt"></i></button>
         </form>
     </div>
-</td>
 }
 

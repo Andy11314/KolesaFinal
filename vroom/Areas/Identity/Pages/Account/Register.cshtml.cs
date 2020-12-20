@@ -14,7 +14,7 @@ using vroom.Helpers;
 
 namespace vroom.Areas.Identity.Pages.Account
 {
-    [Authorize(Roles = Roles.Admin)]
+    
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<IdentityUser> _signInManager;

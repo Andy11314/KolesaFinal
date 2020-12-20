@@ -53,11 +53,12 @@
                 <b>Email: </b>@Html.DisplayFor(m => item.SellerEmail)<br />
                 <b>Phone: </b>@Html.DisplayFor(m => item.SellerPhone)
             </td>
-            @if (User.IsInRole(Roles.Admin) || User.IsInRole(Roles.Executive))
-             {
+            <td class="text-right">
+                @if (User.IsInRole(Roles.Admin) || User.IsInRole(Roles.Executive))
+                {
                 <partial name="_TableButtonPartials" model="item.Id" />
-
-             }
+                }
+             </td>
         </tr>
             }
 
